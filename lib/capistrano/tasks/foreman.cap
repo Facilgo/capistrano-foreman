@@ -1,7 +1,7 @@
 namespace :foreman do
   desc 'Export the Procfile to Ubuntu upstart scripts'
   task :export do
-    on roles(:app) do |host|
+    on roles(:app, :worker) do |host|
       log_path         = shared_path.join('log')
       environment_path = fetch(:foreman_env)
 
@@ -13,21 +13,21 @@ namespace :foreman do
 
   desc 'Start the application services'
   task :start do
-    on roles(:app) do |host|
+    on roles(:app, :worker) do |host|
       execute :start, fetch(:application)
     end
   end
 
   desc 'Stop the application services'
   task :stop do
-    on roles(:app) do |host|
+    on roles(:app, :worker) do |host|
       execute :stop, fetch(:application)
     end
   end
 
   desc 'Restart the application services'
   task :restart do
-    on roles(:app) do |host|
+    on roles(:app, :worker) do |host|
       execute :service, "#{fetch(:application)} start || service #{fetch(:application)} restart"
     end
   end
